@@ -12,25 +12,6 @@ Installation
 
     gem 'ebay_client', '~> 0.3.0'
 
-`config/ebay_client.yml`:
-
-    development: &sandbox
-      api_keys:
-        - token: '<YOUR SANDBOX AUTHENTICATION TOKEN>'
-          devid: '<YOUR SANDBOX DEV ID>'
-          appid: '<YOUR SANDBOX APP ID>'
-          certid: '<YOUR SANDBOX CERT ID>'
-
-    test:
-      <<: *sandbox
-
-    production:
-      api_keys:
-        - token: '<YOUR LIVE AUTHENTICATION TOKEN>'
-          devid: '<YOUR LIVE DEV ID>'
-          appid: '<YOUR LIVE APP ID>'
-          certid: '<YOUR LIVE CERT ID>'
-
 Fire up your console!
 
 Usage
@@ -60,6 +41,6 @@ Notes
   `ebay_client.yml`. On initialization, the EbayClient will randomly
   choose one of them. If you run out of API calls, it will automatically
   switch to another key.
-* You can set your secrets as ENV variables as the `ebay_client.yml` will be parsed 
-  by the ERB interpreter. 
+* You can set your secrets as ENV variables as the `ebay_client.yml` will be parsed
+  by the ERB interpreter.
 * Pull requests and bug reports are welcome!
