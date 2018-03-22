@@ -6,6 +6,7 @@ class EbayClient::Api < ActiveSupport::ProxyObject
   attr_reader :configuration, :endpoint, :namespace, :header, :client, :calls
 
   def initialize(configuration)
+    raise ArgumentError.new('Configuration must be a EbayClient::Configuration') unless configuration.is_a?(EbayClient::Configuration)
     @configuration = configuration
     @endpoint = ::EbayClient::Endpoint.new configuration
     @namespace = :urn

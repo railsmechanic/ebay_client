@@ -1,5 +1,4 @@
 require 'ebay_client/version'
-require 'ebay_client/engine' if defined?(::Rails)
 
 module EbayClient
   autoload :Configuration, 'ebay_client/configuration'

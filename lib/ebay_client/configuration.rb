@@ -1,31 +1,35 @@
 class EbayClient::Configuration
   class ApiKey
-    attr_accessor :appid, :devid, :certid, :token
-
-    def initialize(key_values)
-      key_values.each do |key, val|
-        instance_variable_set "@#{key}", val
-      end
+    attr_reader :appid, :devid, :certid, :token
+    def initialize(key_values={})
+      raise ArgumentError.new('Key values must be of type Hash') unless key_values.is_a?(Hash)
+      @appid  = key_values.fetch(:appid, nil)
+      @devid  = key_values.fetch(:devid, nil)
+      @certid = key_values.fetch(:certid, nil)
+      @token  = key_values.fetch(:token, nil)
     end
   end
 
-  attr_accessor :version, :siteid, :routing, :url, :api_keys, :warning_level, :error_language, :current_key, :savon_log_level, :http_read_timeout
-
-  def initialize(presets)
-    presets.each do |key, val|
-      instance_variable_set "@#{key}", val
-    end
-
-    @api_keys = @api_keys.map do |key_values|
-      ApiKey.new key_values
-    end.shuffle
-    @current_key = @api_keys.first
+  attr_reader :version, :wsdl_file, :siteid, :routing, :url, :api_keys, :warning_level, :error_language, :savon_log_level, :http_read_timeout
+  def initialize(configuration={})
+    raise ArgumentError.new('Configuration must be a Hash') unless configuration.is_a?(Hash)
+    @version            = configuration.fetch(:version, 997)
+    @wsdl_file          = configuration.fetch(:wsdl_file, 'http://developer.ebay.com/webservices/997/eBaySvc.wsdl')
+    @siteid             = configuration.fetch(:siteid, 0)
+    @routing            = configuration.fetch(:routing, 'default')
+    @url                = configuration.fetch(:url, 'https://api.sandbox.ebay.com/wsapi')
+    @api_keys           = Array(configuration.fetch(:api_keys, []))
+    @warning_level      = configuration.fetch(:warning_level, 'High')
+    @error_language     = configuration.fetch(:error_language, 'en_US')
+    @savon_log_level    = configuration.fetch(:savon_log_level, :debug)
+    @http_read_timeout  = configuration.fetch(:http_read_timeout, 600)
+    @preload            = configuration.fetch(:preload, false)
+    @api_keys           = @api_keys.flat_map { |key_values| ApiKey.new(key_values) }.shuffle
+    @current_key        = @api_keys.first
   end
 
   def next_key!
-    i = @api_keys.index(@current_key) + 1
-    i = 0 if i >= @api_keys.count
-    @current_key = @api_keys[i]
+    @current_key = @api_keys.shuffle
   end
 
   def appid
@@ -44,36 +48,8 @@ class EbayClient::Configuration
     @current_key.token
   end
 
-  def wsdl_file
-    @wsdl_file ||= File.expand_path "../../../vendor/ebay/#{version}.wsdl", __FILE__
-  end
-
   def preload?
     !!@preload
   end
 
-  class << self
-    def load(file)
-      defaults = load_defaults
-      configs = YAML.load(ERB.new(File.read(file)).result)
-
-      configs.each_pair do |env, presets|
-        env_defaults = defaults[env] || {}
-        presets = presets || {}
-
-        configs[env] = new env_defaults.merge(presets)
-      end
-
-      configs
-    end
-
-    protected
-    def load_defaults
-      YAML.load_file defaults_file
-    end
-
-    def defaults_file
-      File.expand_path '../../../config/defaults.yml', __FILE__
-    end
-  end
 end
