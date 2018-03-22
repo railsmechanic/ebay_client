@@ -1,3 +1,3 @@
 module EbayClient
-  VERSION = '0.3.1.997'
+  VERSION = '0.3.2.997'
 end
