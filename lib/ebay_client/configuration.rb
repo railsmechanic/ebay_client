@@ -13,8 +13,8 @@ class EbayClient::Configuration
   attr_reader :version, :wsdl_file, :siteid, :routing, :url, :api_keys, :warning_level, :error_language, :savon_log_level, :http_read_timeout
   def initialize(configuration={})
     raise ArgumentError.new('Configuration must be a Hash') unless configuration.is_a?(Hash)
-    @version            = configuration.fetch(:version, 997)
-    @wsdl_file          = configuration.fetch(:wsdl_file, 'http://developer.ebay.com/webservices/997/eBaySvc.wsdl')
+    @version            = configuration.fetch(:version, 1061)
+    @wsdl_file          = configuration.fetch(:wsdl_file, 'http://developer.ebay.com/webservices/1061/eBaySvc.wsdl')
     @siteid             = configuration.fetch(:siteid, 0)
     @routing            = configuration.fetch(:routing, 'default')
     @url                = configuration.fetch(:url, 'https://api.sandbox.ebay.com/wsapi')
