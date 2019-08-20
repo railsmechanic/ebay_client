@@ -11,6 +11,7 @@ class EbayClient::Configuration
   end
 
   attr_reader :version, :wsdl_file, :siteid, :routing, :url, :api_keys, :warning_level, :error_language, :savon_log_level, :http_read_timeout
+
   def initialize(configuration={})
     raise ArgumentError.new('Configuration must be a Hash') unless configuration.is_a?(Hash)
     @version            = configuration.fetch(:version, 1061)
