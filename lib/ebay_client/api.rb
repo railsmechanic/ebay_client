@@ -17,10 +17,9 @@ class EbayClient::Api < ActiveSupport::ProxyObject
       :read_timeout => configuration.http_read_timeout,
       :namespaces => {'xmlns:urn' => 'urn:ebay:apis:eBLBaseComponents'},
       :convert_request_keys_to => :camelcase,
-      :pretty_print_xml => true,
       :log => true,
       :logger => @logger,
-      :log_level => configuration.savon_log_level,
+      :log_level => :debug,
     )
     @calls = 0
 
