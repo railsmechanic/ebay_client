@@ -19,7 +19,7 @@ class EbayClient::Api < ActiveSupport::ProxyObject
       :convert_request_keys_to => :camelcase,
       :log => true,
       :logger => @logger,
-      :log_level => :debug,
+      :log_level => configuration.savon_log_level,
     )
     @calls = 0
 
